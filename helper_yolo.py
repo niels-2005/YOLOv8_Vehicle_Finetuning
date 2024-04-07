@@ -567,9 +567,5 @@ def predict_video(
         )
 
 
-def display_df_values(df: pd.DataFrame):
-    return df.describe().T
-
-
 def export_model(best_model, format: str = "onnx"):
     best_model.export(format=format)
