@@ -425,27 +425,6 @@ def get_best_model(post_training_path: str = "./runs/detect/train") -> YOLO:
     return best_model
 
 
-def get_best_model_metrics(best_model) -> pd.DataFrame:
-    """
-    Retrieves metric values for the best model and presents them in a DataFrame.
-
-    Args:
-        best_model (YOLO): The best YOLO model for which metrics are to be retrieved.
-
-    Returns:
-        pd.DataFrame: DataFrame containing metric values for the best model.
-    """
-    metrics = best_model.val(split="val")
-
-    metrics_df = pd.DataFrame.from_dict(
-        metrics.results_dict, orient="index", columns=["Metric Value"]
-    )
-
-    print("Best Model Metric Values: \n")
-
-    return metrics_df.round(3)
-
-
 def predict_random_samples(
     model,
     img_path: str,
@@ -557,7 +536,7 @@ def predict_video(
     video_path: str,
     show_video_notebook: bool = True,
     video_avi_path: str = "./runs/detect/predict/sample_video.avi",
-    final_video_name: str = "predicted_video.mp4",
+    final_video_name: str = "./src/predicted_video.mp4",
 ) -> None:
     """
     Predicts objects in a video using the specified YOLO model, converts the processed video to mp4 format.
@@ -586,3 +565,11 @@ def predict_video(
                 f"{final_video_name}",
             ]
         )
+
+
+def display_df_values(df: pd.DataFrame):
+    return df.describe().T
+
+
+def export_model(best_model, format: str = "onnx"):
+    best_model.export(format=format)
